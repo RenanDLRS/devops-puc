@@ -1,11 +1,10 @@
 import express from "express";
+import todo from "./routes/todo";
 
 const app = express();
 const port = 3000;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use(todo);
 
 app.listen(port, () => {
   console.log(`Devops Puc is listening on port ${port}`);
