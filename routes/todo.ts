@@ -20,18 +20,34 @@ router.post("/todo", (req, res) => {
   const done = 0
   const todo = `${randomId} - ${description} - ${done}`;
   fs.appendFile("todo.txt", `\n${todo}`, (err) => {});
-  res.send(`Todo '${todo}' created`);
+  return res.send(`Todo '${todo}' created`);
 });
 
 router.get("/todo", (req, res) => {
   const exist = checkIfFileExist();
-  if (!exist) res.send("No todos found");
+  if (!exist) return res.send("No todos found");
   const buffer = fs.readFileSync("todo.txt");
-  res.send(buffer.toString());
+  const todos = buffer.toString();
+  return res.send(todos);
 });
 
 router.patch("/todo", (req, res) => {
-  res.send("Update a todo");
+  const exist = checkIfFileExist();
+  if (!exist) return res.send("No todos found");
+  const buffer = fs.readFileSync("todo.txt");
+  const todos = buffer.toString().split("\n");
+  const id = req.body.id;
+  const done = req.body.done;
+  const findTodo = todos.find((todo) => todo.includes(id + " -"));
+  if (!findTodo) return res.send(`Todo ${id} not found`);
+  const currentDone = findTodo.substring(findTodo.length - 3);
+  const updatedDone = `- ${done}`;
+  const updateTodo = findTodo.replace(currentDone, updatedDone);
+  const othersTodo = todos.filter((todo) => todo !== findTodo);
+  othersTodo.push(updateTodo);
+  const newTodos = othersTodo.join("\n");
+  fs.writeFile("todo.txt", newTodos, (err) => {});
+  return res.send(`Todo updated: ${updateTodo}`);
 });
 
 export default router;
