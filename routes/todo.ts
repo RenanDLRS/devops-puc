@@ -24,7 +24,10 @@ router.post("/todo", (req, res) => {
 });
 
 router.get("/todo", (req, res) => {
-  res.send("Get all todos");
+  const exist = checkIfFileExist();
+  if (!exist) res.send("No todos found");
+  const buffer = fs.readFileSync("todo.txt");
+  res.send(buffer.toString());
 });
 
 router.patch("/todo", (req, res) => {
