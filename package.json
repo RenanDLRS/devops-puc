@@ -4,18 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ci": "npm i",
+    "ci": "npm run test && npm run build",
     "build": "tsc",
-    "test": "npm run build && npm run start",
+    "test": "jest",
     "start": "node dist/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.0",
-    "typescript": "^5.6.2"
+    "express": "^4.21.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21"
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.13",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.2"
   }
 }
